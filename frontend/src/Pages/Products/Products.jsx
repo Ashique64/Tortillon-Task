@@ -21,37 +21,37 @@ const Products = () => {
         fetchProducts();
     }, []);
 
-
     return (
-        <div className="store">
-            {/* <NavBar/> */}
+        <>
+            <NavBar />
+            <div className="store">
+                <div className="title">
+                    <h3>
+                        <span>Our</span> Products
+                    </h3>
+                </div>
+                <div className="product">
+                    {products.map((product) => (
+                        <div className="card" key={product.id}>
+                            <div className="card_items">
+                                <img src={`${BASE_URL}${product.image}`} alt={product.name} />
 
-            <div className="title">
-                <h3>
-                    <span>Our</span> Products
-                </h3>
-            </div>
-            <div className="product">
-                {products.map((product) => (
-                    <div className="card" key={product.id}>
-                        <div className="card_items">
-                            <img src={`${BASE_URL}${product.image}`} alt={product.name} />
-                            
-                            <button>Add To Cart</button>
-                            <div className="card_details">
-                                <h3>{product.name}</h3>
-                                <h4>
-                                    <span> &#8377; :</span> {product.price}
-                                </h4>
-                                <h5>
-                                    <span>{product.quantity}</span> item remaining
-                                </h5>
+                                <button>Add To Cart</button>
+                                <div className="card_details">
+                                    <h3>{product.name}</h3>
+                                    <h4>
+                                        <span> &#8377; :</span> {product.price}
+                                    </h4>
+                                    <h5>
+                                        <span>{product.quantity}</span> item remaining
+                                    </h5>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                ))}
+                    ))}
+                </div>
             </div>
-        </div>
+        </>
     );
 };
 
