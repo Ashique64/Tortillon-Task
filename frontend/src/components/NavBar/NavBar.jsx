@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
 import "./NavBar.scss";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { selectCartTotal } from "../../redux/cartSlice";
 
 const NavBar = () => {
     const [menuIcon, setMenuicon] = useState(false);
     const [activeItem, setActiveItem] = useState("");
+    const cartTotal = useSelector(selectCartTotal);
 
     const handleMenuIcon = () => {
         setMenuicon(!menuIcon);
@@ -52,13 +55,13 @@ const NavBar = () => {
                         </Link>
                     </li>
                     <li>
-                        <Link
+                    <Link
                             className={activeItem === "cart" ? "active" : ""}
                             onClick={() => setActiveItem("cart")}
-                            to = '/cart'
+                            to="/cart"
                         >
                             <i className="fas fa-shopping-cart"></i>
-
+                            {cartTotal > 0 && <span className="cart-badge">{cartTotal}</span>}
                         </Link>
                     </li>
                 </ul>
