@@ -1,7 +1,7 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import NavBar from "../../components/NavBar/NavBar";
-import { removeFromCart } from "../../redux/cartSlice";
+import { removeFromCart, incrementQuantity, decrementQuantity } from "../../redux/cartSlice";
 import "./Cart.scss";
 
 const Cart = () => {
@@ -12,6 +12,16 @@ const Cart = () => {
     const handleRemove = (id) => {
         dispatch(removeFromCart(id));
     };
+
+    const handleIncrement = (id) => {
+        dispatch(incrementQuantity(id));
+    };
+
+    const handleDecrement = (id) => {
+        dispatch(decrementQuantity(id));
+    };
+
+    const cartSubtotal = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
 
     return (
         <>
@@ -31,9 +41,14 @@ const Cart = () => {
                                     <div className="details">
                                         <h3>{item.name}</h3>
                                         <p>
-                                            Price: &#8377; <span>{item.price}</span>
+                                            Price: &#8377; <span>{item.price * item.quantity}</span>
                                         </p>
-                                        <p>Quantity: {item.quantity}</p>
+                                        <p>
+                                            Quantity:
+                                            <button className="decrement" onClick={() => handleDecrement(item.id)}>-</button>
+                                            {item.quantity}
+                                            <button className="increment" onClick={() => handleIncrement(item.id)}>+</button>
+                                        </p>
                                     </div>
                                     <div id="remove">
                                         <i id="" onClick={() => handleRemove(item.id)} className="fas fa-trash"></i>
@@ -45,31 +60,35 @@ const Cart = () => {
                         <p className="empty_cart">Your cart is empty.</p>
                     )}
 
-                    <div className="cart-item2">
-                        <div className="items">
-                            <h3>Cart Total</h3>
-                            <div className="total_items">
-                                <div className="item">
-                                    <p>Cart Subtotal</p>
-                                    <h6>&#8377;999</h6>
+                    {cartItems.length > 0 ? (
+                        <div className="cart-item2">
+                            <div className="items">
+                                <h3>Cart Total</h3>
+                                <div className="total_items">
+                                    <div className="item">
+                                        <p>Cart Subtotal</p>
+                                        <h6>&#8377;{cartSubtotal.toFixed(2)}</h6>
+                                    </div>
+                                    <div className="item">
+                                        <p>Shipping</p>
+                                        <h6>Free</h6>
+                                    </div>
+                                    <div className="item">
+                                        <p>Discount</p>
+                                        <h6>&#8377;0</h6>
+                                    </div>
+                                    <div className="item">
+                                        <p>Cart Total</p>
+                                        <h6>&#8377;{cartSubtotal.toFixed(2)}</h6>
+                                    </div>
                                 </div>
-                                <div className="item">
-                                    <p>Shipping</p>
-                                    <h6>Free</h6>
-                                </div>
-                                <div className="item">
-                                    <p>Discount</p>
-                                    <h6>&#8377;0</h6>
-                                </div>
-                                <div className="item">
-                                    <p>Cart Total</p>
-                                    <h6>&#8377;1999</h6>
-                                </div>
-                            </div>
 
-                            <button>Order Now</button>
+                                <button>Order Now</button>
+                            </div>
                         </div>
-                    </div>
+                    ) : (
+                        <div></div>
+                    )}
                 </div>
             </div>
         </>

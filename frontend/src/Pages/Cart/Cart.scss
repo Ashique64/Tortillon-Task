@@ -67,11 +67,18 @@
                         span {
                             color: #c73324;
                         }
+
+                        .decrement, .increment {
+                            background-color: #323865;
+                            margin: 0px 5px;
+                            cursor: pointer;
+                            color: #c73324;
+                        }
                     }
                 }
 
                 #remove {
-                    font-size: 24px;
+                    font-size: 20px;
                     display: flex;
                     justify-content: center;
 
