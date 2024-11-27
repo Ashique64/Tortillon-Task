@@ -1,7 +1,7 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import NavBar from "../../components/NavBar/NavBar";
-import { removeFromCart, incrementQuantity, decrementQuantity } from "../../redux/cartSlice";
+import { removeFromCart, incrementQuantity, decrementQuantity, clearCart } from "../../redux/cartSlice";
 import "./Cart.scss";
 
 const Cart = () => {
@@ -22,6 +22,42 @@ const Cart = () => {
     };
 
     const cartSubtotal = cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
+
+    const handleOrderNow = async () => {
+        if (cartItems.length === 0) {
+            alert("Your cart is empty.");
+            return;
+        }
+
+        const orders = cartItems.map((item) => ({
+            product_id: item.id,
+            quantity: item.quantity,
+        }));
+
+        try {
+            const response = await fetch(`${BASE_URL}/api/orders/`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ orders }),
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                console.log("Order placed successfully:", data);
+                alert("Order placed successfully!");
+                dispatch(clearCart()); 
+            } else {
+                const errorData = await response.json();
+                console.error("Failed to place order:", errorData);
+                alert("Failed to place order: " + errorData.error);
+            }
+        } catch (error) {
+            console.error("Error:", error);
+            alert("An error occurred. Please try again.");
+        }
+    };
 
     return (
         <>
@@ -83,7 +119,7 @@ const Cart = () => {
                                     </div>
                                 </div>
 
-                                <button>Order Now</button>
+                                <button onClick={handleOrderNow}>Order Now</button>
                             </div>
                         </div>
                     ) : (
